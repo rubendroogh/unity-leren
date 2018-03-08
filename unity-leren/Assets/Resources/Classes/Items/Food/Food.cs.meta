@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 445966a7e49dea84a900c927bd361254
+timeCreated: 1520367057
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - sprite: {instanceID: 0}
+  - clip: {fileID: 8300000, guid: 471e27ddcc1816f4492a170064245742, type: 3}
+  - holder: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

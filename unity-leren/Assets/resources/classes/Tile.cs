@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour {
+[CreateAssetMenu]
+public class Tile : ScriptableObject {
 
-	void Start () {
-		
-	}
-	
-	void Update () {
-		
-	}
+    public string tileName;
+    public Sprite[] sprites;
+    public bool passable;
+    public bool isGroundTile;
+    public bool combinable;
+
+    private SpriteRenderer spriteRenderer;
 }

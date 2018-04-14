@@ -69,7 +69,9 @@ public class MapBuilder : MonoBehaviour {
         // scale the coords
         float xCoordScaled = xCoord * 0.16f;
         float yCoordScaled = yCoord * 0.16f;
-        if (IsInsideBoundaries(xCoordScaled, yCoordScaled, true) && !TileAlreadyThere(xCoord, yCoord, tile.isGroundTile))
+        Vector2 coords = new Vector2(xCoord, yCoord);
+        Vector2 gridCoords = GridSystem.UnityToGridCoord(coords);
+        if (IsInsideBoundaries(gridCoords) && !TileAlreadyThere(xCoord, yCoord, tile.isGroundTile))
         {
             GameObject tileToAdd = new GameObject("Tile", typeof(SpriteRenderer), typeof(TileObject));
             tileToAdd.transform.position = new Vector3(xCoordScaled, yCoordScaled, 0f);
@@ -93,7 +95,7 @@ public class MapBuilder : MonoBehaviour {
             {
                 if (tilesInMap[x, y] != null)
                 {
-                    CombineTiles(tilesInMap[x, y], x, y);
+                    CombineTiles(tilesInMap[x, y], GridSystem.UnityToGridCoord(new Vector2(x, y)));
                 }
             }
         }
@@ -115,14 +117,9 @@ public class MapBuilder : MonoBehaviour {
     }
 
     // check if the tile to create is inside the map
-    private bool IsInsideBoundaries(float xCoord, float yCoord, bool isScaled = false)
+    private bool IsInsideBoundaries(Vector2 gridCoords)
     {
-        if (!isScaled)
-        {
-            xCoord = xCoord * 0.16f;
-            yCoord = yCoord * 0.16f;
-        }
-        bool isInside = (xCoord < xSizeScaled - 0.16f && yCoord < ySizeScaled - 0.16f && xCoord > 0 && yCoord > 0) ? true : false;
+        bool isInside = (gridCoords.x < xSizeScaled - 0.16f && gridCoords.y < ySizeScaled - 0.16f && gridCoords.x > 0 && gridCoords.y > 0) ? true : false;
         return isInside;
     }
 
@@ -137,69 +134,43 @@ public class MapBuilder : MonoBehaviour {
         return isTileThere;
     }
     
-    private void CombineTiles(GameObject tileToAdd, int xCoord, int yCoord)
+    private void CombineTiles(GameObject tileToAdd, Vector2 gridCoords)
     {
         Tile tile = tileToAdd.GetComponent<TileObject>().tile;
         SpriteRenderer SR = tileToAdd.GetComponent<SpriteRenderer>();
         if (tile.combinable)
         {
-            List <Direction> td = new List<Direction>();
-            if (IsInsideBoundaries(xCoord + 1, yCoord))
+            Vector2 unityCoords = GridSystem.GridToUnityCoord(gridCoords);
+            Vector2[] coordsToCheck = new Vector2[]
             {
-                if (tilesInMap[xCoord + 1, yCoord].GetComponent<TileObject>().tile == tile)
-                {
-                    td.Add(Direction.right);
-                }
-            }
-            if (IsInsideBoundaries(xCoord - 1, yCoord))
+                new Vector2(unityCoords.x, unityCoords.y + 1),
+                new Vector2(unityCoords.x + 1, unityCoords.y + 1),
+                new Vector2(unityCoords.x + 1, unityCoords.y),
+                new Vector2(unityCoords.x + 1, unityCoords.y - 1),
+                new Vector2(unityCoords.x, unityCoords.y - 1),
+                new Vector2(unityCoords.x - 1, unityCoords.y - 1),
+                new Vector2(unityCoords.x - 1, unityCoords.y),
+                new Vector2(unityCoords.x - 1, unityCoords.y + 1)
+            };
+
+            List<Direction> td = new List<Direction>();
+            int i = 0;
+
+            foreach(Vector2 coordToCheck in coordsToCheck)
             {
-                if (tilesInMap[xCoord - 1, yCoord].GetComponent<TileObject>().tile == tile)
+                if (IsInsideBoundaries(GridSystem.UnityToGridCoord(coordToCheck)))
                 {
-                    td.Add(Direction.left);
+                    float unityXCoord = coordToCheck.x;
+                    float unityYCoord = coordToCheck.y;
+
+                    if (tilesInMap[Mathf.RoundToInt(unityXCoord), Mathf.RoundToInt(unityYCoord)].GetComponent<TileObject>().tile == tile)
+                    {
+                        td.Add((Direction)i);
+                    }
                 }
+                i++;
             }
-            if (IsInsideBoundaries(xCoord, yCoord + 1))
-            {
-                if (tilesInMap[xCoord, yCoord + 1].GetComponent<TileObject>().tile == tile)
-                {
-                    td.Add(Direction.top);
-                }
-            }
-            if (IsInsideBoundaries(xCoord, yCoord - 1))
-            {
-                if (tilesInMap[xCoord, yCoord - 1].GetComponent<TileObject>().tile == tile)
-                {
-                    td.Add(Direction.bottom);
-                }
-            }
-            if (IsInsideBoundaries(xCoord + 1, yCoord + 1))
-            {
-                if (tilesInMap[xCoord + 1, yCoord + 1].GetComponent<TileObject>().tile == tile)
-                {
-                    td.Add(Direction.topRight);
-                }
-            }
-            if (IsInsideBoundaries(xCoord + 1, yCoord - 1))
-            {
-                if (tilesInMap[xCoord + 1, yCoord - 1].GetComponent<TileObject>().tile == tile)
-                {
-                    td.Add(Direction.bottomRight);
-                }
-            }
-            if (IsInsideBoundaries(xCoord - 1, yCoord + 1))
-            {
-                if (tilesInMap[xCoord - 1, yCoord + 1].GetComponent<TileObject>().tile == tile)
-                {
-                    td.Add(Direction.topLeft);
-                }
-            }
-            if (IsInsideBoundaries(xCoord - 1, yCoord - 1))
-            {
-                if (tilesInMap[xCoord - 1, yCoord - 1].GetComponent<TileObject>().tile == tile)
-                {
-                    td.Add(Direction.bottomLeft);
-                }
-            }
+
             SR.sprite = tile.sprites[6];
             // top left
             if (!td.Contains(Direction.top) && !td.Contains(Direction.left) && td.Contains(Direction.bottom) && td.Contains(Direction.bottomRight) && td.Contains(Direction.right))

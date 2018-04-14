@@ -2,12 +2,12 @@
 
 ### Unity ###
 
-/prototype/[Tt]emp/
-/prototype/[Oo]bj/
-/prototype/[Bb]uild/
-/prototype/[Bb]uilds/
-/prototype/[Ll]ibrary/
-/prototype/ProjectSettings/
+/unity-leren/[Tt]emp/
+/unity-leren/[Oo]bj/
+/unity-leren/[Bb]uild/
+/unity-leren/[Bb]uilds/
+/unity-leren/[Ll]ibrary/
+/unity-leren/ProjectSettings/
 /Assets/AssetStoreTools*
 
 # Visual Studio 2015 cache directory

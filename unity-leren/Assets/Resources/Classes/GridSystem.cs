@@ -21,4 +21,16 @@ public static class GridSystem {
 
         return GridCoords;
     }
+
+    public static float UnityToGridNum(float unityNum)
+    {
+        float gridNum = unityNum * multiplier;
+        return gridNum;
+    }
+
+    public static float GridToUnityNum(float gridNum)
+    {
+        float unityNum = gridNum / multiplier;
+        return unityNum;
+    }
 }

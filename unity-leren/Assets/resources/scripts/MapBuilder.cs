@@ -2,35 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum tileType
-{
-    grass, wall, water, farmland, test, stonetile
-}
-
 public class MapBuilder : MonoBehaviour {
     
     public GameObject mapHolder;
-    public Tile[] tiles;
     public Material pixelMaterial;
 
     [HideInInspector]
     public GameObject[,] tilesInMap;
 
     [Header("Map generation settings")]
-    public int xSize;
-    public int ySize;
+    public Vector2Int unityMapSize;
     public int numberOfLakes;
     public string seed;
     public bool useRandomSeed;
 
-    private float xSizeScaled;
-    private float ySizeScaled;
+    private Vector2 gridMapSize;
+
+    public GameObject lastCreatedTile;
 
     public void InitializeMap()
     {
-        xSizeScaled = xSize * 0.16f;
-        ySizeScaled = ySize * 0.16f;
-        tilesInMap = new GameObject[xSize, ySize];
+        gridMapSize = GridSystem.UnityToGridCoord(unityMapSize);
+        tilesInMap = new GameObject[unityMapSize.x, unityMapSize.y];
         GetSeed();
     }
 
@@ -45,11 +38,11 @@ public class MapBuilder : MonoBehaviour {
 
     public void CreateBaseLayer()
     {
-        for (int i = 0; i < xSize; i++)
+        for (int i = 0; i < unityMapSize.x; i++)
         {
-            for (int j = 0; j < ySize; j++)
+            for (int j = 0; j < unityMapSize.y; j++)
             {
-                CreateTile(tiles[(int)tileType.grass], i, j);
+                CreateTile(TileSystem.tiles["Grass"], i, j);
             }
         }
     }
@@ -59,9 +52,9 @@ public class MapBuilder : MonoBehaviour {
         for (int i = 0; i < numberOfLakes; i++)
         {
             Lake lake = new Lake();
-            lake.GenerateLake(xSize, ySize, this);
+            lake.GenerateLake(unityMapSize.x, unityMapSize.y, this);
         }
-        Structure structure = new Structure(xSize, ySize, this);
+        Structure structure = new Structure(unityMapSize.x, unityMapSize.y, this);
     }
 
     public void CreateTile(Tile tile, int xCoord, int yCoord)
@@ -71,7 +64,7 @@ public class MapBuilder : MonoBehaviour {
         float yCoordScaled = yCoord * 0.16f;
         Vector2 coords = new Vector2(xCoord, yCoord);
         Vector2 gridCoords = GridSystem.UnityToGridCoord(coords);
-        if (IsInsideBoundaries(gridCoords) && !TileAlreadyThere(xCoord, yCoord, tile.isGroundTile))
+        if (IsInsideBoundaries(coords) && !TileAlreadyThere(gridCoords, tile.isGroundTile))
         {
             GameObject tileToAdd = new GameObject("Tile", typeof(SpriteRenderer), typeof(TileObject));
             tileToAdd.transform.position = new Vector3(xCoordScaled, yCoordScaled, 0f);
@@ -84,14 +77,15 @@ public class MapBuilder : MonoBehaviour {
             tileData.tile = tile;
             tileToAdd.transform.parent = mapHolder.transform;
             tilesInMap[xCoord, yCoord] = tileToAdd;
+            lastCreatedTile = tileToAdd;
         }
     }
 
     public void CombineTilesInMap()
     {
-        for (int x = 1; x < xSize; x++)
+        for (int x = 1; x < unityMapSize.x; x++)
         {
-            for (int y = 1; y < ySize; y++)
+            for (int y = 1; y < unityMapSize.y; y++)
             {
                 if (tilesInMap[x, y] != null)
                 {
@@ -119,25 +113,31 @@ public class MapBuilder : MonoBehaviour {
     // check if the tile to create is inside the map
     private bool IsInsideBoundaries(Vector2 gridCoords)
     {
-        bool isInside = (gridCoords.x < xSizeScaled - 0.16f && gridCoords.y < ySizeScaled - 0.16f && gridCoords.x > 0 && gridCoords.y > 0) ? true : false;
+        bool isInside = (gridCoords.x < unityMapSize.x - 0.16f && gridCoords.y < unityMapSize.y - 0.16f && gridCoords.x > 0 && gridCoords.y > 0) ? true : false;
         return isInside;
     }
 
     // check if a tile is there already, if you're adding a ground tile, overwrite old tile
-    private bool TileAlreadyThere(int xCoord, int yCoord, bool newGroundTile = false)
+    private bool TileAlreadyThere(Vector2 gridCoords, bool newGroundTile = false)
     {
-        bool isTileThere = (tilesInMap[xCoord, yCoord] != null && !tilesInMap[xCoord, yCoord].GetComponent<TileObject>().tile.isGroundTile && !newGroundTile) ? true : false;
-        if (newGroundTile)
+        Vector2Int unityCoords = Vector2Int.RoundToInt(GridSystem.GridToUnityCoord(gridCoords));
+        if (IsInsideBoundaries(unityCoords))
         {
-            RemoveTile(xCoord, yCoord);
+            bool isTileThere = (tilesInMap[unityCoords.x, unityCoords.y] != null && !tilesInMap[unityCoords.x, unityCoords.y].GetComponent<TileObject>().tile.isGroundTile && !newGroundTile) ? true : false;
+            if (newGroundTile)
+            {
+                RemoveTile(unityCoords.x, unityCoords.y);
+            }
+            return isTileThere;
         }
-        return isTileThere;
+
+        return false;
     }
     
-    private void CombineTiles(GameObject tileToAdd, Vector2 gridCoords)
+    public void CombineTiles(GameObject tileToChange, Vector2 gridCoords)
     {
-        Tile tile = tileToAdd.GetComponent<TileObject>().tile;
-        SpriteRenderer SR = tileToAdd.GetComponent<SpriteRenderer>();
+        Tile tile = tileToChange.GetComponent<TileObject>().tile;
+        SpriteRenderer SR = tileToChange.GetComponent<SpriteRenderer>();
         if (tile.combinable)
         {
             Vector2 unityCoords = GridSystem.GridToUnityCoord(gridCoords);
@@ -158,11 +158,10 @@ public class MapBuilder : MonoBehaviour {
 
             foreach(Vector2 coordToCheck in coordsToCheck)
             {
-                if (IsInsideBoundaries(GridSystem.UnityToGridCoord(coordToCheck)))
+                if (IsInsideBoundaries(coordToCheck))
                 {
                     float unityXCoord = coordToCheck.x;
                     float unityYCoord = coordToCheck.y;
-
                     if (tilesInMap[Mathf.RoundToInt(unityXCoord), Mathf.RoundToInt(unityYCoord)].GetComponent<TileObject>().tile == tile)
                     {
                         td.Add((Direction)i);
@@ -172,6 +171,7 @@ public class MapBuilder : MonoBehaviour {
             }
 
             SR.sprite = tile.sprites[6];
+
             // top left
             if (!td.Contains(Direction.top) && !td.Contains(Direction.left) && td.Contains(Direction.bottom) && td.Contains(Direction.bottomRight) && td.Contains(Direction.right))
             {

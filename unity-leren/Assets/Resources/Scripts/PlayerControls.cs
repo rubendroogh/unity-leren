@@ -121,7 +121,7 @@ public class PlayerControls : MonoBehaviour {
         }
         if (Input.GetKeyDown("r"))
         {
-            mapBuilder.CreateTile(mapBuilder.tiles[(int)tileType.wall], player.xTilePos, player.yTilePos);
+            mapBuilder.CreateTile(TileSystem.tiles["Wall"], player.xTilePos, player.yTilePos);
             mapBuilder.CombineTilesInMap();
         }
     }

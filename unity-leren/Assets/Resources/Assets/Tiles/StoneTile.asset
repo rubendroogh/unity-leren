@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e16d5c01a3860684da8ef48983032e24, type: 3}
   m_Name: StoneTile
   m_EditorClassIdentifier: 
-  tileName: Stone tile
+  tileName: Stone Tile
   sprites:
   - {fileID: 21300000, guid: 3db0cc781dc069848bb7c8de083cee9a, type: 3}
   passable: 1

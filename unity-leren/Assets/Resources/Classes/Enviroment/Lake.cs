@@ -33,7 +33,7 @@ public class Lake {
         {
             for (int y = 0; y < yLakeSize/2; y++)
             {
-                mapBuilder.CreateTile(mapBuilder.tiles[(int)tileType.water], startXCoord + x, startYCoord + y);
+                mapBuilder.CreateTile(TileSystem.tiles["Water"], startXCoord + x, startYCoord + y);
                 // growthChance: 1 at the center, lower near the edges
                 AddExtraLakeDetails(x, y, mapBuilder);
             }
@@ -47,8 +47,8 @@ public class Lake {
         xGrowthChance = 1 / xGrowthChance;
         if (Random.Range(0.0f, 1.0f) < xGrowthChance * 3)
         {
-            mapBuilder.CreateTile(mapBuilder.tiles[(int)tileType.water], startXCoord + x, startYCoord + y + 1);
-            mapBuilder.CreateTile(mapBuilder.tiles[(int)tileType.water], startXCoord + x, startYCoord + y - 1);
+            mapBuilder.CreateTile(TileSystem.tiles["Water"], startXCoord + x, startYCoord + y + 1);
+            mapBuilder.CreateTile(TileSystem.tiles["Water"], startXCoord + x, startYCoord + y - 1);
         }
 
         float yGrowthChance = (y < 0) ? y * -1 : y;
@@ -56,8 +56,8 @@ public class Lake {
         yGrowthChance = 1 / yGrowthChance;
         if (Random.Range(0.0f, 1.0f) < yGrowthChance * 3)
         {
-            mapBuilder.CreateTile(mapBuilder.tiles[(int)tileType.water], startXCoord + x + 1, startYCoord + y);
-            mapBuilder.CreateTile(mapBuilder.tiles[(int)tileType.water], startXCoord + x - 1, startYCoord + y);
+            mapBuilder.CreateTile(TileSystem.tiles["Water"], startXCoord + x + 1, startYCoord + y);
+            mapBuilder.CreateTile(TileSystem.tiles["Water"], startXCoord + x - 1, startYCoord + y);
         }
     }
 }

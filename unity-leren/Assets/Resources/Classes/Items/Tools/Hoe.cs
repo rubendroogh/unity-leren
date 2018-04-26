@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Items/Tools/Hoe")]
 public class Hoe : Item
 {
+    private int maxDistance = 4;
+
     public override void Use()
     {
         base.Use();
@@ -12,22 +14,17 @@ public class Hoe : Item
         audio.clip = clip;
         audio.volume = 0.05f;
         MapBuilder mapBuilder = GameObject.Find("GameManager").GetComponent<MapBuilder>();
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = GridSystem.GridToUnityCoord(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 holderPos = new Vector2(holder.xTilePos, holder.yTilePos);
 
-        mousePos.x = mousePos.x * (1/0.16f);
-        mousePos.y = mousePos.y * (1/0.16f);
+        Vector2 distance = TileSystem.GridDistance(mousePos, holderPos);
 
-        float xPosDiff = mousePos.x - holder.xTilePos;
-        float yPosDiff = mousePos.y - holder.yTilePos;
-
-        xPosDiff = (xPosDiff < 0) ? xPosDiff * -1 : xPosDiff;
-        yPosDiff = (yPosDiff < 0) ? yPosDiff * -1 : yPosDiff;
-
-        if (xPosDiff <= 4 && yPosDiff <= 4)
+        if (distance.x <= maxDistance && distance.y <= maxDistance)
         {
+            mapBuilder.CreateTile(TileSystem.tiles["Farmland"], Mathf.RoundToInt(mousePos.x), Mathf.RoundToInt(mousePos.y));
             audio.Play();
-            mapBuilder.CreateTile(mapBuilder.tiles[(int)tileType.farmland], Mathf.RoundToInt(mousePos.x) , Mathf.RoundToInt(mousePos.y));
-            mapBuilder.CombineTilesInMap();
+            mapBuilder.CombineTiles(mapBuilder.lastCreatedTile, mousePos);
         }
     }
+    
 }

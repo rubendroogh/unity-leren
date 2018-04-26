@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e16d5c01a3860684da8ef48983032e24, type: 3}
   m_Name: Farmland
   m_EditorClassIdentifier: 
-  tileName: 
+  tileName: Farmland
   sprites:
   - {fileID: 21300000, guid: 3872082bec3e8c546a9ede3cce7765d9, type: 3}
   - {fileID: 21300002, guid: 3872082bec3e8c546a9ede3cce7765d9, type: 3}

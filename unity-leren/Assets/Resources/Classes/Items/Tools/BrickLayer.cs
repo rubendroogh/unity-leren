@@ -9,25 +9,15 @@ public class BrickLayer : Item
 
     public override void Use()
     {
-        base.Use();
         MapBuilder mapBuilder = GameObject.Find("GameManager").GetComponent<MapBuilder>();
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = GridSystem.GridToUnityCoord(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 holderPos = new Vector2(holder.xTilePos, holder.yTilePos);
 
-        // convert to coords
-        mousePos.x = mousePos.x * (1/0.16f);
-        mousePos.y = mousePos.y * (1/0.16f);
+        Vector2 distance = TileSystem.GridDistance(mousePos, holderPos);
 
-        // calc distance between mousepos and player
-        float xPosDiff = mousePos.x - holder.xTilePos;
-        float yPosDiff = mousePos.y - holder.yTilePos;
-
-        // make positive number
-        xPosDiff = (xPosDiff < 0) ? xPosDiff * -1 : xPosDiff;
-        yPosDiff = (yPosDiff < 0) ? yPosDiff * -1 : yPosDiff;
-
-        if (xPosDiff <= maxDistance && yPosDiff <= maxDistance)
+        if (distance.x <= maxDistance && distance.y <= maxDistance)
         {
-            mapBuilder.CreateTile(mapBuilder.tiles[(int)tileType.wall], Mathf.RoundToInt(mousePos.x) , Mathf.RoundToInt(mousePos.y));
+            mapBuilder.CreateTile(TileSystem.tiles["Tree"], Mathf.RoundToInt(mousePos.x) , Mathf.RoundToInt(mousePos.y));
         }
     }
 }

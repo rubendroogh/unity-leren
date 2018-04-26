@@ -19,7 +19,7 @@ public class Drill : Item
         mousePos.x = mousePos.x * (1 / 0.16f);
         mousePos.y = mousePos.y * (1 / 0.16f);
 
-        if (mapBuilder.tilesInMap[Mathf.RoundToInt(mousePos.x), Mathf.RoundToInt(mousePos.y)].GetComponent<TileObject>().tile == mapBuilder.tiles[(int)tileType.wall])
+        if (mapBuilder.tilesInMap[Mathf.RoundToInt(mousePos.x), Mathf.RoundToInt(mousePos.y)].GetComponent<TileObject>().tile == TileSystem.tiles["Wall"])
         {
             mapBuilder.RemoveTile(Mathf.RoundToInt(mousePos.x), Mathf.RoundToInt(mousePos.y));
             audio.Play();

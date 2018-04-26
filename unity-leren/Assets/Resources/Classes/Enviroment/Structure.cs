@@ -10,7 +10,7 @@ public class Structure {
         {
             for (int y = 0; y < 10; y++)
             {
-                mapBuilder.CreateTile(mapBuilder.tiles[(int)tileType.stonetile], x, y);
+                mapBuilder.CreateTile(TileSystem.tiles["Stone Tile"], x, y);
             }
         }
     }

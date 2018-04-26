@@ -22,7 +22,7 @@ public class MapBuilder : MonoBehaviour {
 
     public void InitializeMap()
     {
-        gridMapSize = GridSystem.UnityToGridCoord(unityMapSize);
+        gridMapSize = GridPoints.UnityToGridCoord(unityMapSize);
         tilesInMap = new GameObject[unityMapSize.x, unityMapSize.y];
         GetSeed();
     }
@@ -63,7 +63,7 @@ public class MapBuilder : MonoBehaviour {
         float xCoordScaled = xCoord * 0.16f;
         float yCoordScaled = yCoord * 0.16f;
         Vector2 coords = new Vector2(xCoord, yCoord);
-        Vector2 gridCoords = GridSystem.UnityToGridCoord(coords);
+        Vector2 gridCoords = GridPoints.UnityToGridCoord(coords);
         if (IsInsideBoundaries(coords) && !TileAlreadyThere(gridCoords, tile.isGroundTile))
         {
             GameObject tileToAdd = new GameObject("Tile", typeof(SpriteRenderer), typeof(TileObject));
@@ -89,7 +89,7 @@ public class MapBuilder : MonoBehaviour {
             {
                 if (tilesInMap[x, y] != null)
                 {
-                    CombineTiles(tilesInMap[x, y], GridSystem.UnityToGridCoord(new Vector2(x, y)));
+                    CombineTiles(tilesInMap[x, y], GridPoints.UnityToGridCoord(new Vector2(x, y)));
                 }
             }
         }
@@ -120,7 +120,7 @@ public class MapBuilder : MonoBehaviour {
     // check if a tile is there already, if you're adding a ground tile, overwrite old tile
     private bool TileAlreadyThere(Vector2 gridCoords, bool newGroundTile = false)
     {
-        Vector2Int unityCoords = Vector2Int.RoundToInt(GridSystem.GridToUnityCoord(gridCoords));
+        Vector2Int unityCoords = Vector2Int.RoundToInt(GridPoints.GridToUnityCoord(gridCoords));
         if (IsInsideBoundaries(unityCoords))
         {
             bool isTileThere = (tilesInMap[unityCoords.x, unityCoords.y] != null && !tilesInMap[unityCoords.x, unityCoords.y].GetComponent<TileObject>().tile.isGroundTile && !newGroundTile) ? true : false;
@@ -140,7 +140,7 @@ public class MapBuilder : MonoBehaviour {
         SpriteRenderer SR = tileToChange.GetComponent<SpriteRenderer>();
         if (tile.combinable)
         {
-            Vector2 unityCoords = GridSystem.GridToUnityCoord(gridCoords);
+            Vector2 unityCoords = GridPoints.GridToUnityCoord(gridCoords);
             Vector2[] coordsToCheck = new Vector2[]
             {
                 new Vector2(unityCoords.x, unityCoords.y + 1),

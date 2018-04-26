@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class GridSystem {
+public static class GridPoints {
 
     public static float multiplier = 0.16f;
 

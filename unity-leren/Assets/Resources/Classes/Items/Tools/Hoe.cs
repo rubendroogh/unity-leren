@@ -14,7 +14,7 @@ public class Hoe : Item
         audio.clip = clip;
         audio.volume = 0.05f;
         MapBuilder mapBuilder = GameObject.Find("GameManager").GetComponent<MapBuilder>();
-        Vector2 mousePos = GridSystem.GridToUnityCoord(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        Vector2 mousePos = GridPoints.GridToUnityCoord(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         Vector2 holderPos = new Vector2(holder.xTilePos, holder.yTilePos);
 
         Vector2 distance = TileSystem.GridDistance(mousePos, holderPos);

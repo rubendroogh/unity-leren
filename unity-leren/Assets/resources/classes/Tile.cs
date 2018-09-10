@@ -10,6 +10,7 @@ public class Tile : ScriptableObject {
     public bool passable;
     public bool isGroundTile;
     public bool combinable;
+    public int layer = 0;
 
     private SpriteRenderer spriteRenderer;
 }

@@ -17,3 +17,4 @@ MonoBehaviour:
   passable: 0
   isGroundTile: 0
   combinable: 0
+  layer: 4

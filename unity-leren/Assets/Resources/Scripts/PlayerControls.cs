@@ -23,7 +23,7 @@ public class PlayerControls : MonoBehaviour {
     private Vector3 mousePos;
     private GameObject inventoryPanel;
     private GameObject inventoryDescription;
-    private MapBuilder mapBuilder;
+    private MapController mapBuilder;
 
     [SerializeField]
     private GameObject exitButton;
@@ -45,7 +45,7 @@ public class PlayerControls : MonoBehaviour {
         sprite = GetComponent<SpriteRenderer>();
         body = GetComponent<Rigidbody2D>();
         player = GetComponent<Player>();
-        mapBuilder = GameObject.Find("GameManager").GetComponent<MapBuilder>();
+        mapBuilder = GameObject.Find("GameManager").GetComponent<MapController>();
     }
 
     void Update()

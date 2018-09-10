@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class LoadingMap : MonoBehaviour {
 
     [SerializeField]
-    private MapBuilder mapBuilder;
+    private MapController mapBuilder;
     [SerializeField]
     private Text loadingText;
     [SerializeField]
@@ -20,23 +20,23 @@ public class LoadingMap : MonoBehaviour {
 
     public IEnumerator LoadingCoroutine()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 1; i < 5; i++)
         {
             switch (i)
             {
-                case 0:
+                case 1:
                     mapBuilder.InitializeMap();
                     loadingText.text = "Initializing map...";
                     break;
-                case 1:
+                case 2:
                     mapBuilder.CreateBaseLayer();
                     loadingText.text = "Creating base layer...";
                     break;
-                case 2:
+                case 3:
                     mapBuilder.CreateStructures();
                     loadingText.text = "Creating structures...";
                     break;
-                case 3:
+                case 4:
                     mapBuilder.CombineTilesInMap();
                     loadingText.text = "Combining tiles...";
                     Destroy(loadingText);
@@ -47,9 +47,4 @@ public class LoadingMap : MonoBehaviour {
             yield return null;
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

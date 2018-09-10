@@ -18,7 +18,7 @@ public class Lake {
 
     public float[,] lakeMap;
 
-    public void GenerateLake(int xMapSize, int yMapSize, MapBuilder mapBuilder)
+    public void GenerateLake(int xMapSize, int yMapSize, MapController mapBuilder)
     {
         // if no size is specified, make a random one
         xLakeSize = (xLakeSize == 0) ? Random.Range(minXLakeSize, maxXLakeSize) : xLakeSize;
@@ -40,7 +40,7 @@ public class Lake {
         }
     }
 
-    void AddExtraLakeDetails(int x, int y, MapBuilder mapBuilder)
+    void AddExtraLakeDetails(int x, int y, MapController mapBuilder)
     {
         float xGrowthChance = (x < 0) ? x * -1 : x;
         xGrowthChance = (xGrowthChance == 0) ? 1 : xGrowthChance;

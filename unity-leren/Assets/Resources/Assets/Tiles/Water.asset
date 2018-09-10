@@ -40,3 +40,4 @@ MonoBehaviour:
   passable: 0
   isGroundTile: 0
   combinable: 1
+  layer: 1

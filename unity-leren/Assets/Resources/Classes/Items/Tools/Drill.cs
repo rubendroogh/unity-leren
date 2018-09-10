@@ -13,7 +13,7 @@ public class Drill : Item
         AudioSource audio = GameObject.Find("GameManager").GetComponent<AudioSource>();
         audio.clip = clip;
         audio.volume = 0.2f;
-        MapBuilder mapBuilder = GameObject.Find("GameManager").GetComponent<MapBuilder>();
+        MapController mapBuilder = GameObject.Find("GameManager").GetComponent<MapController>();
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         mousePos.x = mousePos.x * (1 / 0.16f);

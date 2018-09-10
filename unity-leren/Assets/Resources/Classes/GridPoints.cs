@@ -2,24 +2,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class GridPoints {
+/*
+ * GridPoints class is the coordinate system for tiles
+ *   1 gridpoint = 0.16 unitycoordinate
+ */
+
+public class GridPoints {
 
     public static float multiplier = 0.16f;
+    public float x;
+    public float y;
+    public int layer;
 
-    public static Vector2 UnityToGridCoord(Vector2 UnityCoords)
+    public GridPoints(float x = 0, float y = 0, int layer = 0)
     {
-        UnityCoords.x = UnityCoords.x * multiplier;
-        UnityCoords.y = UnityCoords.y * multiplier;
-
-        return UnityCoords;
+        this.x = x;
+        this.y = y;
+        this.layer = layer;
     }
 
-    public static Vector2 GridToUnityCoord(Vector2 GridCoords)
+    public static GridPoints UnityToGridCoord(Vector2 unityCoords)
     {
-        GridCoords.x = GridCoords.x / multiplier;
-        GridCoords.y = GridCoords.y / multiplier;
+        GridPoints gridPoints = new GridPoints
+        {
+            x = unityCoords.x * multiplier,
+            y = unityCoords.y * multiplier
+        };
 
-        return GridCoords;
+        return gridPoints;
+    }
+
+    public static Vector2 GridToUnityCoord(GridPoints gridCoords)
+    {
+        Vector2 unityCoords = new Vector2
+        {
+            x = gridCoords.x / multiplier,
+            y = gridCoords.y / multiplier
+        };
+
+        return unityCoords;
+    }
+
+    public static GridPoints MousePosToGridPoints(Vector2 mousePosition)
+    {
+        mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+        GridPoints gridPoints = new GridPoints
+        {
+            x = mousePosition.x / multiplier,
+            y = mousePosition.y / multiplier
+        };
+
+        return gridPoints;
     }
 
     public static float UnityToGridNum(float unityNum)
@@ -32,5 +65,29 @@ public static class GridPoints {
     {
         float unityNum = gridNum / multiplier;
         return unityNum;
+    }
+
+    public static GridPoints GridDistance(GridPoints coordsToMeasureFrom, GridPoints coordsToMeasureTo)
+    {
+        GridPoints gridDistance = new GridPoints
+        {
+            x = coordsToMeasureTo.x - coordsToMeasureFrom.x,
+            y = coordsToMeasureTo.y - coordsToMeasureFrom.y
+        };
+
+        gridDistance.x = Mathf.Abs(gridDistance.x);
+        gridDistance.y = Mathf.Abs(gridDistance.y);
+
+        return gridDistance;
+    }
+
+    public static implicit operator GridPoints(Vector2 toConvert)
+    {
+        return new GridPoints(toConvert.x * multiplier, toConvert.y * multiplier);
+    }
+
+    public static implicit operator GridPoints(Vector3 toConvert)
+    {
+        return new GridPoints(toConvert.x * multiplier, toConvert.y * multiplier);
     }
 }

@@ -1,13 +1,11 @@
-# Created by https://www.gitignore.io/api/unity
-
 ### Unity ###
 
-/unity-leren/[Tt]emp/
-/unity-leren/[Oo]bj/
-/unity-leren/[Bb]uild/
-/unity-leren/[Bb]uilds/
-/unity-leren/[Ll]ibrary/
-/unity-leren/ProjectSettings/
+/unity-leren/[Tt]emp/*
+/unity-leren/[Oo]bj/*
+/unity-leren/[Bb]uild/*
+/unity-leren/[Bb]uilds/*
+/unity-leren/[Ll]ibrary/*
+/unity-leren/ProjectSettings/*
 /Assets/AssetStoreTools*
 
 # Visual Studio 2015 cache directory

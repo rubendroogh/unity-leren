@@ -20,4 +20,12 @@ public class Item : ScriptableObject {
     {
         // do something
     }
+
+    protected virtual void PlayAudio(AudioClip clip, float volume = 1)
+    {
+        AudioSource audio = GameObject.Find("GameManager").GetComponent<AudioSource>();
+        audio.clip = clip;
+        audio.volume = 0.05f;
+        audio.Play();
+    }
 }

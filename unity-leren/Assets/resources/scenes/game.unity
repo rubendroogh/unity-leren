@@ -154,7 +154,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.13802983, g: 0.8161765, b: 0.78811514, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -349,19 +349,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapHolder: {fileID: 631701721}
-  tiles:
-  - {fileID: 11400000, guid: 778da2ecd623dd2478407939c1883b14, type: 2}
-  - {fileID: 11400000, guid: 0f915d5b0f1cc8c4ba7902acb54581e6, type: 2}
-  - {fileID: 11400000, guid: 01fd72869ceac1e4eaf4b2260187193a, type: 2}
-  - {fileID: 11400000, guid: a291380b0dedad444af0e82d83cf709d, type: 2}
-  - {fileID: 11400000, guid: decea0ce8630fcc4997e3f3a31069700, type: 2}
-  - {fileID: 11400000, guid: 148b498febe32514386d9e832778538c, type: 2}
   pixelMaterial: {fileID: 2100000, guid: 4b5a2c1c9eb616048995adbb23290e9d, type: 2}
-  xSize: 200
-  ySize: 200
-  numberOfLakes: 125
+  unityMapSize: {x: 100, y: 100}
+  numberOfLakes: 30
   seed: 636538099254089628
-  useRandomSeed: 1
+  useRandomSeed: 0
+  lastCreatedTile: {fileID: 0}
 --- !u!114 &248931378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -701,6 +694,58 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 509726239}
+--- !u!1001 &512596899
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4729457866277606, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 1.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729457866277606, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.292
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729457866277606, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729457866277606, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729457866277606, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729457866277606, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729457866277606, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729457866277606, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114036973388298114, guid: e3a9040965c4bdb46941a0122a3a73b6,
+        type: 2}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 11400000, guid: 1065aae8987aec647aaef145cb821983,
+        type: 2}
+    - target: {fileID: 1714687529195810, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+      propertyPath: m_Name
+      value: PlaceableItem (6)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: e3a9040965c4bdb46941a0122a3a73b6, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &576274139
 GameObject:
   m_ObjectHideFlags: 0

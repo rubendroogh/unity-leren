@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapBuilder : MonoBehaviour {
-    
+/*
+ * For each map, there is a MapController
+ *   It generates the map
+ *   It processes map settings, like size
+ *   It keeps track of all tiles within the map
+ */
+
+public class MapController : MonoBehaviour {
+
     public GameObject mapHolder;
     public Material pixelMaterial;
 
     [HideInInspector]
     public GameObject[,] tilesInMap;
+    public GameObject[,,] mapTiles;
 
     [Header("Map generation settings")]
     public Vector2Int unityMapSize;
@@ -16,14 +24,16 @@ public class MapBuilder : MonoBehaviour {
     public string seed;
     public bool useRandomSeed;
 
-    private Vector2 gridMapSize;
+    private GridPoints gridMapSize;
 
+    [HideInInspector]
     public GameObject lastCreatedTile;
 
     public void InitializeMap()
     {
         gridMapSize = GridPoints.UnityToGridCoord(unityMapSize);
         tilesInMap = new GameObject[unityMapSize.x, unityMapSize.y];
+        mapTiles = new GameObject[unityMapSize.x, unityMapSize.y, 16]; //array with all tiles
         GetSeed();
     }
 
@@ -59,15 +69,13 @@ public class MapBuilder : MonoBehaviour {
 
     public void CreateTile(Tile tile, int xCoord, int yCoord)
     {
-        // scale the coords
-        float xCoordScaled = xCoord * 0.16f;
-        float yCoordScaled = yCoord * 0.16f;
         Vector2 coords = new Vector2(xCoord, yCoord);
-        Vector2 gridCoords = GridPoints.UnityToGridCoord(coords);
+        GridPoints gridCoords = GridPoints.UnityToGridCoord(coords);
+
         if (IsInsideBoundaries(coords) && !TileAlreadyThere(gridCoords, tile.isGroundTile))
         {
             GameObject tileToAdd = new GameObject("Tile", typeof(SpriteRenderer), typeof(TileObject));
-            tileToAdd.transform.position = new Vector3(xCoordScaled, yCoordScaled, 0f);
+            tileToAdd.transform.position = new Vector3(gridCoords.x, gridCoords.y, 0f);
 
             // to render the sprites correctly
             SpriteRenderer spriteRenderer = tileToAdd.GetComponent<SpriteRenderer>();
@@ -111,14 +119,14 @@ public class MapBuilder : MonoBehaviour {
     }
 
     // check if the tile to create is inside the map
-    private bool IsInsideBoundaries(Vector2 gridCoords)
+    public bool IsInsideBoundaries(Vector2 unityCoords)
     {
-        bool isInside = (gridCoords.x < unityMapSize.x - 0.16f && gridCoords.y < unityMapSize.y - 0.16f && gridCoords.x > 0 && gridCoords.y > 0) ? true : false;
+        bool isInside = (unityCoords.x < unityMapSize.x - 0.16f && unityCoords.y < unityMapSize.y - 0.16f && unityCoords.x > 0 && unityCoords.y > 0) ? true : false;
         return isInside;
     }
 
     // check if a tile is there already, if you're adding a ground tile, overwrite old tile
-    private bool TileAlreadyThere(Vector2 gridCoords, bool newGroundTile = false)
+    public bool TileAlreadyThere(GridPoints gridCoords, bool newGroundTile = false)
     {
         Vector2Int unityCoords = Vector2Int.RoundToInt(GridPoints.GridToUnityCoord(gridCoords));
         if (IsInsideBoundaries(unityCoords))
@@ -134,7 +142,7 @@ public class MapBuilder : MonoBehaviour {
         return false;
     }
     
-    public void CombineTiles(GameObject tileToChange, Vector2 gridCoords)
+    public void CombineTiles(GameObject tileToChange, GridPoints gridCoords)
     {
         Tile tile = tileToChange.GetComponent<TileObject>().tile;
         SpriteRenderer SR = tileToChange.GetComponent<SpriteRenderer>();
